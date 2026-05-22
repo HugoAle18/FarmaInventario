@@ -38,15 +38,11 @@ export default function StockClient({
     const motivo = form.get("motivo") as string
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) throw new Error("No autenticado")
-
       const { error } = await supabase.from("movimientos_stock").insert({
         producto_id,
         tipo,
         cantidad,
         motivo,
-        usuario_id: user.id,
       })
 
       if (error) throw error
