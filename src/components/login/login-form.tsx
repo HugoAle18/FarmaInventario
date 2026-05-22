@@ -8,36 +8,34 @@ import PasswordInput from "./password-input"
 const supabase = createClient()
 
 export default function LoginForm({ serverError }: { serverError?: string }) {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [show, setShow] = useState(false)
   const router = useRouter()
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
     setLoading(true)
 
-    const formData = new FormData(e.currentTarget)
-    const email = formData.get("email") as string
-    const password = formData.get("password") as string
+    console.log("Intentando login con:", email)
 
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password: password.trim(),
+    })
 
-      if (error) {
-        setError("Credenciales incorrectas. Verifica tu email y contraseña.")
-        return
-      }
+    console.log("Resultado:", data, error)
 
-      router.push("/")
-    } catch {
-      setError("Error de conexión. Intenta nuevamente.")
-    } finally {
+    if (error) {
+      setError(error.message)
       setLoading(false)
+      return
     }
+
+    router.push("/")
   }
 
   const displayError = serverError || error
@@ -69,8 +67,9 @@ export default function LoginForm({ serverError }: { serverError?: string }) {
             </span>
             <input
               id="email"
-              name="email"
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               autoComplete="email"
               className="w-full bg-white border border-[#E2E8F0] rounded-lg pl-10 pr-4 py-3 text-[15px] text-[#1E293B] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#10B981]/20 focus:border-[#10B981] transition-all"
@@ -81,14 +80,37 @@ export default function LoginForm({ serverError }: { serverError?: string }) {
 
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <label htmlFor="password" className="text-[#475569] text-[13px] font-semibold uppercase tracking-wider">
+            <label htmlFor="password" className="block text-[#475569] text-[13px] font-semibold uppercase tracking-wider">
               Contraseña
             </label>
             <a href="#" className="text-[13px] text-[#10B981] font-medium hover:underline transition-colors">
               ¿Olvidaste tu contraseña?
             </a>
           </div>
-          <PasswordInput />
+          <div className="relative">
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#94A3B8]">
+              lock
+            </span>
+            <input
+              id="password"
+              type={show ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
+              className="w-full bg-white border border-[#E2E8F0] rounded-lg pl-10 pr-12 py-3 text-[15px] text-[#1E293B] placeholder:text-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#10B981]/20 focus:border-[#10B981] transition-all"
+              placeholder="••••••••"
+            />
+            <button
+              type="button"
+              onClick={() => setShow(!show)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#64748B] transition-colors"
+            >
+              <span className="material-symbols-outlined text-[20px]">
+                {show ? "visibility_off" : "visibility"}
+              </span>
+            </button>
+          </div>
         </div>
 
         <button
