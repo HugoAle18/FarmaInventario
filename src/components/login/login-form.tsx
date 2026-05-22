@@ -7,37 +7,40 @@ import PasswordInput from "./password-input"
 
 const supabase = createClient()
 
-export default function LoginForm({ error }: { error?: string }) {
+export default function LoginForm({ serverError }: { serverError?: string }) {
   const [loading, setLoading] = useState(false)
-  const [localError, setLocalError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setError(null)
     setLoading(true)
-    setLocalError(null)
 
-    const form = e.currentTarget
-    const email = (form.elements.namedItem("email") as HTMLInputElement).value
-    const password = (form.elements.namedItem("password") as HTMLInputElement).value
+    const formData = new FormData(e.currentTarget)
+    const email = formData.get("email") as string
+    const password = formData.get("password") as string
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
 
-    if (error) {
-      setLocalError(
-        error.message === "Invalid login credentials"
-          ? "Credenciales inválidas. Verifica tu email y contraseña."
-          : error.message
-      )
+      if (error) {
+        setError("Credenciales incorrectas. Verifica tu email y contraseña.")
+        return
+      }
+
+      router.push("/")
+    } catch {
+      setError("Error de conexión. Intenta nuevamente.")
+    } finally {
       setLoading(false)
-      return
     }
-
-    router.refresh()
-    router.push("/")
   }
 
-  const displayError = error || localError
+  const displayError = serverError || error
 
   return (
     <div>

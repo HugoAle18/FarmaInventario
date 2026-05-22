@@ -90,7 +90,7 @@ export default async function LoginPage(props: {
             </h1>
           </div>
 
-          <LoginForm error={error} />
+          <LoginForm serverError={error} />
         </div>
       </div>
     </main>
