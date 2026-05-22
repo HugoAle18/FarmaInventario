@@ -8,9 +8,9 @@ export default async function LoginPage(props: {
   const error = searchParams?.error
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 h-dvh w-full overflow-hidden">
+    <div className="flex h-screen w-full overflow-hidden">
       {/* Left Panel - #0F1B2D */}
-      <div className="hidden lg:flex flex-col justify-between w-1/2 min-w-[480px] bg-[#0F1B2D] p-12 h-full relative">
+      <div className="hidden lg:flex flex-col w-[45%] bg-[#0F1B2D] p-12 min-h-screen relative">
         {/* Decorative gradient blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-[#10B981]/5" style={{ filter: "blur(100px)" }} />
@@ -32,8 +32,8 @@ export default async function LoginPage(props: {
           </div>
 
           {/* Spacer */}
-          <div className="flex-1 flex flex-col justify-center">
-            <p className="text-slate-400 text-base leading-relaxed max-w-sm mt-3">
+          <div className="flex flex-col gap-8 mt-16">
+            <p className="text-slate-400 text-base leading-7 w-full">
               Sistema inteligente de gestión de inventario para farmacias.
             </p>
 
@@ -74,7 +74,7 @@ export default async function LoginPage(props: {
       </div>
 
       {/* Right Panel - White */}
-      <div className="flex items-center justify-center bg-white px-6 py-10">
+      <div className="flex flex-1 items-center justify-center bg-white px-6 py-10">
         <div className="w-full max-w-[400px] mx-auto">
           {/* Mobile Logo */}
           <div className="lg:hidden text-center mb-8">
