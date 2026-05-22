@@ -16,8 +16,7 @@ CREATE TABLE IF NOT EXISTS detalle_ventas (
   venta_id uuid REFERENCES ventas(id) ON DELETE CASCADE,
   producto_id uuid REFERENCES productos(id),
   cantidad integer NOT NULL,
-  precio_unitario decimal(10,2) NOT NULL,
-  subtotal decimal(10,2) NOT NULL
+  precio_unitario decimal(10,2) NOT NULL
 );
 
 CREATE OR REPLACE FUNCTION descontar_stock()

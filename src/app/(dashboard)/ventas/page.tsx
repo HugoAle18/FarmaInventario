@@ -93,7 +93,6 @@ export default function VentasPage() {
         producto_id: c.producto.id,
         cantidad: c.cantidad,
         precio_unitario: c.producto.precio_venta,
-        subtotal: c.cantidad * c.producto.precio_venta,
       }))
 
       const { error: errorDetalle } = await supabase
