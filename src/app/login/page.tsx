@@ -74,8 +74,8 @@ export default async function LoginPage(props: {
       </div>
 
       {/* Right Panel - White */}
-      <div className="flex flex-1 items-center justify-center min-h-screen bg-white px-8">
-        <div className="w-full max-w-[420px]">
+      <div style={{display:'flex', flex:1, alignItems:'center', justifyContent:'center', minHeight:'100vh', backgroundColor:'white'}}>
+        <div style={{width:'100%', maxWidth:'420px', padding:'0 32px'}}>
           {/* Mobile Logo */}
           <div className="lg:hidden text-center mb-8">
             <div className="w-12 h-12 rounded-xl bg-[#10B981] flex items-center justify-center mx-auto mb-4 shadow-lg shadow-[#10B981]/30">
