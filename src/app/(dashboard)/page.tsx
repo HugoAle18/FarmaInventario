@@ -1,4 +1,5 @@
 import KpiCard from "@/components/dashboard/kpi-card"
+import StockChart from "@/components/dashboard/stock-chart"
 import { getDashboardStats, getAlertasCriticas } from "@/lib/supabase/queries"
 
 export default async function DashboardPage() {
@@ -66,7 +67,7 @@ export default async function DashboardPage() {
       {/* Main Content Grid */}
       <div className="grid grid-cols-12 gap-lg">
         {/* Chart Area */}
-        <div className="col-span-12 lg:col-span-8 bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm">
+        <div className="w-full overflow-hidden col-span-12 lg:col-span-8 bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm">
           <div className="flex justify-between items-center mb-xl">
             <div>
               <h2 className="font-headline-sm text-headline-sm">Movimiento de Stock</h2>
@@ -79,51 +80,7 @@ export default async function DashboardPage() {
               <option>Mes Pasado</option>
             </select>
           </div>
-          <div className="h-[300px] w-full relative">
-            <div className="absolute inset-0 flex items-end justify-between px-xs h-[240px]">
-              <div className="absolute inset-0 flex justify-between">
-                {Array.from({ length: 7 }).map((_, i) => (
-                  <div key={i} className="h-full border-l border-outline-variant/30" />
-                ))}
-              </div>
-              <div
-                className="absolute inset-0 chart-gradient"
-                style={{
-                  clipPath:
-                    "polygon(0 80%, 16% 65%, 33% 85%, 50% 45%, 66% 60%, 83% 20%, 100% 35%, 100% 100%, 0% 100%)",
-                }}
-              />
-              <svg className="absolute inset-0 w-full h-full overflow-visible">
-                <path
-                  d="M 0 192 L 138 156 L 276 204 L 414 108 L 552 144 L 690 48 L 828 84"
-                  fill="none"
-                  stroke="#006c49"
-                  strokeWidth={3}
-                  vectorEffect="non-scaling-stroke"
-                />
-                {([
-                  [0, 192],
-                  [138, 156],
-                  [276, 204],
-                  [414, 108],
-                  [552, 144],
-                  [690, 48],
-                  [828, 84],
-                ] as [number, number][]).map(([cx, cy], i) => (
-                  <circle key={i} cx={cx} cy={cy} fill="#006c49" r={4} />
-                ))}
-              </svg>
-            </div>
-            <div className="absolute bottom-0 w-full flex justify-between font-label-caps text-[10px] text-on-surface-variant pt-xs border-t border-outline-variant">
-              <span>LUN</span>
-              <span>MAR</span>
-              <span>MIE</span>
-              <span>JUE</span>
-              <span>VIE</span>
-              <span>SAB</span>
-              <span>DOM</span>
-            </div>
-          </div>
+          <StockChart />
         </div>
 
         {/* Right Column */}
