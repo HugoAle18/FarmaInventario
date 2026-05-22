@@ -7,107 +7,72 @@ export default async function LoginPage(props: {
   const error = searchParams?.error
 
   return (
-    <div style={{ display: "flex", height: "100vh", width: "100%", overflow: "hidden" }}>
-      {/* Left Panel - #0F1B2D */}
+    <main style={{ display: "flex", width: "100%", minHeight: "100vh" }}>
+      {/* Left Panel */}
       <div
         style={{
-          display: "none",
-          flexDirection: "column",
           width: "45%",
           backgroundColor: "#0F1B2D",
           padding: "48px",
-          minHeight: "100vh",
-          position: "relative",
+          display: "flex",
+          flexDirection: "column",
+          gap: "32px",
         }}
-        className="lg:flex"
       >
-        {/* Decorative blobs */}
-        <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>
+        {/* Logo */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <div
             style={{
-              position: "absolute",
-              top: -160,
-              right: -160,
-              width: 500,
-              height: 500,
-              borderRadius: "50%",
-              backgroundColor: "rgba(16, 185, 129, 0.05)",
-              filter: "blur(100px)",
+              width: 44,
+              height: 44,
+              borderRadius: 12,
+              backgroundColor: "#10B981",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "0 10px 15px -3px rgba(16, 185, 129, 0.3)",
             }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: -160,
-              left: -160,
-              width: 400,
-              height: 400,
-              borderRadius: "50%",
-              backgroundColor: "rgba(16, 185, 129, 0.05)",
-              filter: "blur(100px)",
-            }}
-          />
-        </div>
-
-        {/* Content */}
-        <div style={{ position: "relative", zIndex: 10, display: "flex", flexDirection: "column", height: "100%" }}>
-          {/* Logo */}
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: "12px",
-                backgroundColor: "#10B981",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                boxShadow: "0 10px 15px -3px rgba(16, 185, 129, 0.3)",
-              }}
-            >
-              <span className="material-symbols-outlined" style={{ color: "white", fontSize: 26 }}>
-                medical_services
-              </span>
-            </div>
-            <span style={{ color: "white", fontWeight: 700, fontSize: 24, letterSpacing: "-0.025em" }}>
-              FarmaInventario
+          >
+            <span className="material-symbols-outlined" style={{ color: "white", fontSize: 26 }}>
+              medical_services
             </span>
           </div>
+          <span style={{ color: "white", fontWeight: 700, fontSize: 24, letterSpacing: "-0.025em" }}>
+            FarmaInventario
+          </span>
+        </div>
 
-          {/* Spacer + features */}
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <p style={{ color: "#94A3B8", fontSize: 16, lineHeight: "28px", width: "100%" }}>
-              Sistema inteligente de gestión de inventario para farmacias.
-            </p>
+        {/* Tagline */}
+        <p style={{ color: "#94A3B8", fontSize: 16, lineHeight: "28px", margin: 0 }}>
+          Sistema inteligente de gestión de inventario para farmacias.
+        </p>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 24, marginTop: 48 }}>
-              <Feature icon="inventory_2" title="Control de Stock" desc="Tiempo real con alertas inteligentes" />
-              <Feature icon="event_note" title="Trazabilidad de Lotes" desc="Control de vencimientos" />
-              <Feature icon="bar_chart" title="Reportes" desc="Ventas e indicadores clave" />
-            </div>
-          </div>
+        {/* Features */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+          <Feature icon="inventory_2" title="Control de Stock" desc="Tiempo real con alertas inteligentes" />
+          <Feature icon="event_note" title="Trazabilidad de Lotes" desc="Control de vencimientos" />
+          <Feature icon="bar_chart" title="Reportes" desc="Ventas e indicadores clave" />
         </div>
       </div>
 
-      {/* Right Panel - White */}
+      {/* Right Panel */}
       <div
         style={{
-          display: "flex",
           flex: 1,
+          display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "100vh",
           backgroundColor: "white",
         }}
       >
-        <div style={{ width: "100%", maxWidth: 420, padding: "0 32px" }}>
+        <div style={{ width: "100%", maxWidth: 400, padding: "32px" }}>
           {/* Mobile Logo */}
-          <div className="lg:hidden" style={{ textAlign: "center", marginBottom: 32 }}>
+          <div style={{ textAlign: "center", marginBottom: 32 }} className="lg:hidden">
             <div
               style={{
                 width: 48,
                 height: 48,
-                borderRadius: "12px",
+                borderRadius: 12,
                 backgroundColor: "#10B981",
                 display: "flex",
                 alignItems: "center",
@@ -120,7 +85,7 @@ export default async function LoginPage(props: {
                 medical_services
               </span>
             </div>
-            <h1 style={{ color: "#0F1B2D", fontWeight: 700, fontSize: 24, letterSpacing: "-0.025em" }}>
+            <h1 style={{ color: "#0F1B2D", fontWeight: 700, fontSize: 24, letterSpacing: "-0.025em", margin: 0 }}>
               FarmaInventario
             </h1>
           </div>
@@ -128,7 +93,7 @@ export default async function LoginPage(props: {
           <LoginForm error={error} />
         </div>
       </div>
-    </div>
+    </main>
   )
 }
 
@@ -139,7 +104,7 @@ function Feature({ icon, title, desc }: { icon: string; title: string; desc: str
         style={{
           width: 40,
           height: 40,
-          borderRadius: "8px",
+          borderRadius: 8,
           backgroundColor: "rgba(16, 185, 129, 0.15)",
           display: "flex",
           alignItems: "center",
@@ -153,8 +118,8 @@ function Feature({ icon, title, desc }: { icon: string; title: string; desc: str
         </span>
       </div>
       <div>
-        <p style={{ color: "white", fontWeight: 600, fontSize: 14 }}>{title}</p>
-        <p style={{ color: "#94A3B8", fontSize: 12, lineHeight: "20px", marginTop: 2 }}>{desc}</p>
+        <p style={{ color: "white", fontWeight: 600, fontSize: 14, margin: 0 }}>{title}</p>
+        <p style={{ color: "#94A3B8", fontSize: 12, lineHeight: "20px", marginTop: 2, margin: 0 }}>{desc}</p>
       </div>
     </div>
   )
