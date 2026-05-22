@@ -16,7 +16,7 @@ export default function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-[260px] bg-primary-container flex-col py-lg z-50 hidden lg:flex">
+    <aside className="hidden lg:flex lg:w-[260px] lg:flex-col lg:shrink-0 h-full bg-primary-container py-lg">
       <div className="px-lg mb-xl">
         <h1 className="font-headline-md text-headline-md font-bold text-on-primary">
           FarmaInventario
@@ -25,35 +25,35 @@ export default function Sidebar() {
           Pharmacy Management
         </p>
       </div>
-      <nav className="flex flex-col gap-xs flex-1">
+      <nav className="flex flex-col gap-xs flex-1 min-h-0 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/")
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-md px-md py-sm transition-all active:scale-95 ${
+              className={`flex items-center gap-md px-md py-sm shrink-0 transition-all active:scale-95 ${
                 isActive
                   ? "border-l-4 border-secondary bg-secondary/10 text-secondary font-bold"
                   : "text-on-primary-container/70 hover:text-on-primary hover:bg-on-primary-fixed-variant/10 transition-colors duration-200"
               }`}
             >
-              <span className="material-symbols-outlined">{item.icon}</span>
-              <span className="font-body-md text-body-md">{item.label}</span>
+              <span className="material-symbols-outlined shrink-0">{item.icon}</span>
+              <span className="font-body-md text-body-md truncate">{item.label}</span>
             </Link>
           )
         })}
         <div className="mt-auto">
           <Link
             href="/configuracion"
-            className={`flex items-center gap-md px-md py-sm transition-all active:scale-95 ${
+            className={`flex items-center gap-md px-md py-sm shrink-0 transition-all active:scale-95 ${
               pathname === "/configuracion"
                 ? "border-l-4 border-secondary bg-secondary/10 text-secondary font-bold"
                 : "text-on-primary-container/70 hover:text-on-primary hover:bg-on-primary-fixed-variant/10 transition-colors duration-200"
             }`}
           >
-            <span className="material-symbols-outlined">settings</span>
-            <span className="font-body-md text-body-md">Configuración</span>
+            <span className="material-symbols-outlined shrink-0">settings</span>
+            <span className="font-body-md text-body-md truncate">Configuración</span>
           </Link>
         </div>
       </nav>

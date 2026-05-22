@@ -95,10 +95,21 @@
   --radius-xl: 0.75rem;
 }
 
+*,
+*::before,
+*::after {
+  word-break: normal;
+  overflow-wrap: normal;
+  -webkit-hyphens: none;
+  hyphens: none;
+}
+
 body {
   font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
   background-color: var(--color-background);
   color: var(--color-on-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .material-symbols-outlined {
