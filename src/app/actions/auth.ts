@@ -13,39 +13,11 @@ export async function login(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword({ email, password })
 
   if (error) {
-    redirect(`/login?error=${encodeURIComponent(error.message)}`)
-  }
-
-  revalidatePath("/", "layout")
-  redirect("/")
-}
-
-export async function signup(formData: FormData) {
-  const supabase = await createClient()
-
-  const email = formData.get("email") as string
-  const password = formData.get("password") as string
-  const nombre = formData.get("nombre") as string
-
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-      data: { nombre },
-    },
-  })
-
-  if (error) {
-    redirect(`/login?error=${encodeURIComponent(error.message)}`)
-  }
-
-  if (data.user) {
-    await supabase.from("usuarios_farmacia").insert({
-      id: data.user.id,
-      nombre,
-      email,
-      rol: "auxiliar",
-    })
+    const message =
+      error.message === "Invalid login credentials"
+        ? "Credenciales inválidas. Verifica tu email y contraseña."
+        : error.message
+    return redirect(`/login?error=${encodeURIComponent(message)}`)
   }
 
   revalidatePath("/", "layout")

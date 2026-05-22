@@ -1,5 +1,6 @@
-import { updateSession } from "@/lib/supabase/proxy"
+import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { updateSession } from "@/lib/supabase/proxy"
 
 export async function proxy(request: NextRequest) {
   const { supabaseResponse, user } = await updateSession(request)
@@ -26,8 +27,6 @@ export async function proxy(request: NextRequest) {
 
   return supabaseResponse
 }
-
-import { NextResponse } from "next/server"
 
 export const config = {
   matcher: [
