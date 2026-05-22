@@ -15,11 +15,10 @@ export default function ReportesPage() {
   const [ventasHoy, setVentasHoy] = useState(0)
   const [ventasMes, setVentasMes] = useState(0)
   const [stockBajo, setStockBajo] = useState(0)
-  const [stockCritico, setStockCritico] = useState(0)
   const [ventasGrafico, setVentasGrafico] = useState<any[]>([])
   const [topProductos, setTopProductos] = useState<any[]>([])
   const [alertasStock, setAlertasStock] = useState<any[]>([])
-  const [alertasStockCritico, setAlertasStockCritico] = useState<any[]>([])
+  const [stockCritico, setStockCritico] = useState(0)
 
   useEffect(() => {
     loadData()
@@ -68,14 +67,10 @@ export default function ReportesPage() {
       })
       setTopProductos(Object.entries(agrupado).map(([, v]) => v).sort((a, b) => b.total - a.total).slice(0, 5))
 
-      // Alertas stock bajo via RPC
+      // Alertas stock via RPC
       const { data: stockBajoData } = await supabase.rpc("get_productos_stock_bajo")
       setAlertasStock(stockBajoData ?? [])
-
-      // Stock crítico via RPC
-      const { data: stockCriticoData } = await supabase.rpc("get_productos_por_vencer")
-      setAlertasStockCritico(stockCriticoData ?? [])
-      setStockCritico(stockCriticoData?.length ?? 0)
+      setStockCritico(stockBajoData?.filter((p: any) => p.stock_actual <= 5).length ?? 0)
 
     } catch (e) {
       console.error("Error loading reportes:", e)
@@ -219,30 +214,29 @@ export default function ReportesPage() {
         {/* Alertas desde RPC */}
         <div className="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm">
           <h3 className="font-headline-sm text-headline-sm text-primary mb-lg">Alertas Críticas</h3>
-          {alertasStock.length === 0 && alertasStockCritico.length === 0 ? (
+          {alertasStock.length === 0 ? (
             <p className="font-body-md text-body-md text-on-surface-variant">Todo en orden ✅</p>
           ) : (
             <div className="space-y-md">
-              {alertasStock.map((p: any, i: number) => (
-                <div key={`stock-${i}`} className="flex items-center gap-md p-sm rounded-lg bg-amber-50 border border-amber-200">
-                  <span className="material-symbols-outlined text-amber-600">inventory</span>
-                  <div className="flex-1">
-                    <p className="font-body-md font-semibold text-amber-900">{p.nombre}</p>
-                    <p className="text-[12px] text-amber-700">Stock: {p.stock_actual} / Mínimo: {p.stock_minimo}</p>
+              {alertasStock.map((p: any, i: number) => {
+                const esAgotado = p.stock_actual === 0
+                const esCritico = p.stock_actual <= 5
+                const badge = esAgotado
+                  ? { label: "Agotado", bg: "bg-red-50", border: "border-red-200", icon: "priority_high", iconColor: "text-error", textColor: "text-red-900", subText: "text-red-700", badgeBg: "bg-red-200", badgeText: "text-red-800" }
+                  : esCritico
+                    ? { label: "Stock Crítico", bg: "bg-red-50", border: "border-red-200", icon: "priority_high", iconColor: "text-error", textColor: "text-red-900", subText: "text-red-700", badgeBg: "bg-red-200", badgeText: "text-red-800" }
+                    : { label: "Stock Bajo", bg: "bg-amber-50", border: "border-amber-200", icon: "inventory", iconColor: "text-amber-600", textColor: "text-amber-900", subText: "text-amber-700", badgeBg: "bg-amber-200", badgeText: "text-amber-800" }
+                return (
+                  <div key={`alert-${i}`} className={`flex items-center gap-md p-sm rounded-lg ${badge.bg} ${badge.border}`}>
+                    <span className={`material-symbols-outlined ${badge.iconColor}`}>{badge.icon}</span>
+                    <div className="flex-1">
+                      <p className={`font-body-md font-semibold ${badge.textColor}`}>{p.nombre}</p>
+                      <p className={`text-[12px] ${badge.subText}`}>Stock: {p.stock_actual} / Mínimo: {p.stock_minimo}</p>
+                    </div>
+                    <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${badge.badgeBg} ${badge.badgeText} uppercase`}>{badge.label}</span>
                   </div>
-                  <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-amber-200 text-amber-800 uppercase">Stock Bajo</span>
-                </div>
-              ))}
-              {alertasStockCritico.map((p: any, i: number) => (
-                <div key={`critico-${i}`} className="flex items-center gap-md p-sm rounded-lg bg-red-50 border border-red-200">
-                  <span className="material-symbols-outlined text-error">priority_high</span>
-                  <div className="flex-1">
-                    <p className="font-body-md font-semibold text-red-900">{p.nombre}</p>
-                    <p className="text-[12px] text-red-700">SKU: {p.codigo_sku} — Stock: {p.stock_actual}</p>
-                  </div>
-                  <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-red-200 text-red-800 uppercase">Stock Crítico</span>
-                </div>
-              ))}
+                )
+              })}
             </div>
           )}
         </div>
