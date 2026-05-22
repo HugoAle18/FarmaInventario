@@ -40,7 +40,8 @@ export default function ProveedoresClient({ proveedores }: { proveedores: any[] 
         </button>
       </div>
 
-      <div className="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm">
+      {/* Table — desktop */}
+      <div className="hidden md:block bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -85,6 +86,41 @@ export default function ProveedoresClient({ proveedores }: { proveedores: any[] 
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Cards — móvil */}
+      <div className="md:hidden space-y-3">
+        {proveedores.map((p) => (
+          <div key={p.id} style={{ backgroundColor: "white", borderRadius: "12px", padding: "16px", boxShadow: "0 1px 3px rgba(0,0,0,0.1)", border: "1px solid #E5E7EB" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div>
+                <p className="font-body-md font-semibold text-on-surface">{p.nombre}</p>
+                <p className="text-xs text-gray-500 mt-0.5">{p.ruc || "Sin RUC"}</p>
+              </div>
+              <span className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${p.activo !== false ? "bg-secondary/10 text-secondary border-secondary/20" : "bg-error-container text-on-error-container border-error/20"}`}>
+                {p.activo !== false ? "ACTIVO" : "INACTIVO"}
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-2 mt-3 text-sm text-gray-600">
+              <div><span className="text-gray-400">Contacto:</span> {p.contacto || "-"}</div>
+              <div><span className="text-gray-400">Tel:</span> {p.telefono || "-"}</div>
+              <div className="col-span-2"><span className="text-gray-400">Email:</span> {p.email || "-"}</div>
+            </div>
+            <div className="flex gap-3 mt-3 pt-3 border-t border-gray-100">
+              <button onClick={() => openEdit(p)} className="flex items-center gap-1 text-xs text-secondary px-3 py-1.5 rounded-lg hover:bg-secondary/10 transition-colors">
+                <span className="material-symbols-outlined text-[16px]">edit</span>
+                Editar
+              </button>
+              <button onClick={() => handleDelete(p.id, p.nombre)} className="flex items-center gap-1 text-xs text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors">
+                <span className="material-symbols-outlined text-[16px]">delete</span>
+                Eliminar
+              </button>
+            </div>
+          </div>
+        ))}
+        {proveedores.length === 0 && (
+          <p className="text-center py-xl text-gray-500 text-sm">No hay proveedores registrados.</p>
+        )}
       </div>
 
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={editing ? "Editar Proveedor" : "Agregar Proveedor"} size="lg">

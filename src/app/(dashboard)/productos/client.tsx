@@ -114,81 +114,37 @@ export default function ProductosClient({
         />
       </div>
 
-      {/* Table */}
-      <div className="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm">
+      {/* Table — desktop */}
+      <div className="hidden md:block bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-surface-container border-b border-outline-variant">
-                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
-                  Código
-                </th>
-                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
-                  Nombre
-                </th>
-                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
-                  Categoría
-                </th>
-                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
-                  Stock
-                </th>
-                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
-                  Mínimo
-                </th>
-                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
-                  Precio
-                </th>
-                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">
-                  Estado
-                </th>
-                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-center">
-                  Acciones
-                </th>
+                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Código</th>
+                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Nombre</th>
+                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Categoría</th>
+                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Stock</th>
+                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Mínimo</th>
+                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Precio</th>
+                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Estado</th>
+                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-center">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant/30">
               {paginated.map((p) => {
                 const status = getStatus(p.stock_actual, p.stock_minimo)
                 return (
-                  <tr
-                    key={p.id}
-                    className="hover:bg-surface-container-low transition-colors cursor-default"
-                  >
-                    <td className="px-md py-sm font-label-technical text-label-technical text-on-surface-variant mono-font">
-                      {p.codigo_sku}
-                    </td>
-                    <td className="px-md py-sm font-body-md text-body-md font-semibold text-on-surface">
-                      {p.nombre}
-                    </td>
-                    <td className="px-md py-sm font-body-md text-body-md text-on-surface-variant">
-                      {p.categorias?.nombre ?? "-"}
-                    </td>
-                    <td
-                      className={`px-md py-sm font-body-md text-body-md font-bold ${
-                        status === "agotado"
-                          ? "text-error"
-                          : status === "stock_bajo"
-                            ? "text-tertiary-fixed-dim"
-                            : "text-secondary"
-                      }`}
-                    >
-                      {p.stock_actual.toLocaleString()}
-                    </td>
-                    <td className="px-md py-sm font-body-md text-body-md text-on-surface-variant">
-                      {p.stock_minimo}
-                    </td>
-                    <td className="px-md py-sm font-body-md text-body-md font-medium text-on-surface">
-                      ${Number(p.precio_venta).toFixed(2)}
-                    </td>
-                    <td className="px-md py-sm">
-                      <Badge status={status} />
-                    </td>
+                  <tr key={p.id} className="hover:bg-surface-container-low transition-colors cursor-default">
+                    <td className="px-md py-sm font-label-technical text-label-technical text-on-surface-variant mono-font">{p.codigo_sku}</td>
+                    <td className="px-md py-sm font-body-md text-body-md font-semibold text-on-surface">{p.nombre}</td>
+                    <td className="px-md py-sm font-body-md text-body-md text-on-surface-variant">{p.categorias?.nombre ?? "-"}</td>
+                    <td className={`px-md py-sm font-body-md text-body-md font-bold ${status === "agotado" ? "text-error" : status === "stock_bajo" ? "text-tertiary-fixed-dim" : "text-secondary"}`}>{p.stock_actual.toLocaleString()}</td>
+                    <td className="px-md py-sm font-body-md text-body-md text-on-surface-variant">{p.stock_minimo}</td>
+                    <td className="px-md py-sm font-body-md text-body-md font-medium text-on-surface">${Number(p.precio_venta).toFixed(2)}</td>
+                    <td className="px-md py-sm"><Badge status={status} /></td>
                     <td className="px-md py-sm text-center">
                       <div className="flex justify-center gap-xs">
-                        <button
-                          onClick={() => handleDelete(p.id, p.nombre)}
-                          className="p-1.5 text-on-surface-variant hover:text-error hover:bg-error/10 rounded transition-all"
-                        >
+                        <button onClick={() => handleDelete(p.id, p.nombre)} className="p-1.5 text-on-surface-variant hover:text-error hover:bg-error/10 rounded transition-all">
                           <span className="material-symbols-outlined text-[20px]">delete</span>
                         </button>
                       </div>
@@ -199,6 +155,45 @@ export default function ProductosClient({
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Cards — móvil */}
+      <div className="md:hidden space-y-3">
+        {paginated.map((p) => {
+          const status = getStatus(p.stock_actual, p.stock_minimo)
+          const statusColors: Record<string, { bg: string; text: string; label: string }> = {
+            disponible: { bg: "bg-green-100", text: "text-green-800", label: "Disponible" },
+            stock_bajo: { bg: "bg-amber-100", text: "text-amber-800", label: "Stock Bajo" },
+            agotado: { bg: "bg-red-100", text: "text-red-800", label: "Agotado" },
+          }
+          const sc = statusColors[status] ?? { bg: "bg-gray-100", text: "text-gray-800", label: status }
+          return (
+            <div key={p.id} style={{ backgroundColor: "white", borderRadius: "12px", padding: "16px", boxShadow: "0 1px 3px rgba(0,0,0,0.1)", border: "1px solid #E5E7EB" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div>
+                  <p className="font-body-md font-semibold text-on-surface">{p.nombre}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{p.codigo_sku}</p>
+                </div>
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${sc.bg} ${sc.text}`}>{sc.label}</span>
+              </div>
+              <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
+                <span>Stock: <strong>{p.stock_actual}</strong></span>
+                <span>Mín: {p.stock_minimo}</span>
+                <span>Cat: {p.categorias?.nombre ?? "-"}</span>
+              </div>
+              <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+                <span className="text-sm font-semibold text-secondary">${Number(p.precio_venta).toFixed(2)}</span>
+                <button onClick={() => handleDelete(p.id, p.nombre)} className="flex items-center gap-1 text-xs text-red-600 hover:text-red-800 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors">
+                  <span className="material-symbols-outlined text-[16px]">delete</span>
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          )
+        })}
+        {paginated.length === 0 && (
+          <p className="text-center py-xl text-gray-500 text-sm">No se encontraron productos.</p>
+        )}
       </div>
 
       {/* Pagination + Stats */}

@@ -101,7 +101,8 @@ export default function StockClient({
         </div>
       </div>
 
-      <div className="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm">
+      {/* Table — desktop */}
+      <div className="hidden md:block bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
@@ -138,6 +139,33 @@ export default function StockClient({
         </div>
       </div>
 
+      {/* Cards — móvil */}
+      <div className="md:hidden space-y-3">
+        {movimientos.map((m) => {
+          const badge = badgeTipo[m.tipo] ?? { label: m.tipo, bg: "bg-gray-100", text: "text-gray-800" }
+          const fecha = new Date(m.created_at)
+          const fechaStr = fecha.toLocaleDateString("es-PE", { day: "2-digit", month: "2-digit", year: "numeric" }) + " " + fecha.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" })
+          return (
+            <div key={m.id} style={{ backgroundColor: "white", borderRadius: "12px", padding: "16px", boxShadow: "0 1px 3px rgba(0,0,0,0.1)", border: "1px solid #E5E7EB" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div>
+                  <p className="font-body-md font-semibold text-on-surface">{m.productos?.nombre ?? "-"}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{fechaStr}</p>
+                </div>
+                <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase ${badge.bg} ${badge.text}`}>{badge.label}</span>
+              </div>
+              <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
+                <span>Cantidad: <strong>{m.cantidad}</strong></span>
+                <span>Motivo: {m.motivo ?? "-"}</span>
+              </div>
+            </div>
+          )
+        })}
+        {movimientos.length === 0 && (
+          <p className="text-center py-xl text-gray-500 text-sm">No hay movimientos registrados aún</p>
+        )}
+      </div>
+
       {/* Drawer lateral */}
       {drawerOpen && (
         <>
@@ -154,7 +182,8 @@ export default function StockClient({
             position: 'fixed',
             top: 0,
             right: 0,
-            width: '440px',
+            width: '100%',
+            maxWidth: '440px',
             height: '100vh',
             backgroundColor: 'white',
             boxShadow: '-8px 0 32px rgba(0,0,0,0.15)',
