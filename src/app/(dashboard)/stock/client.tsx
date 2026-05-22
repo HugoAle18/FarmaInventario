@@ -91,75 +91,125 @@ export default function StockClient({
       {drawerOpen && (
         <>
           <div
-            style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.3)", zIndex: 49 }}
             onClick={() => setDrawerOpen(false)}
-          />
-          <div
             style={{
-              position: "fixed",
-              top: 0,
-              right: 0,
-              width: "420px",
-              height: "100vh",
-              backgroundColor: "white",
-              boxShadow: "-4px 0 24px rgba(0,0,0,0.12)",
-              zIndex: 50,
-              padding: "32px",
-              overflowY: "auto",
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: 'rgba(0,0,0,0.4)',
+              zIndex: 40
             }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <h2 style={{ fontSize: "20px", fontWeight: 600 }}>
-                {tipo === "entrada"
-                  ? "📦 Registrar Entrada"
-                  : tipo === "salida"
-                    ? "📤 Registrar Salida"
-                    : "⚖️ Ajuste de Stock"}
+          />
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            right: 0,
+            width: '440px',
+            height: '100vh',
+            backgroundColor: 'white',
+            boxShadow: '-8px 0 32px rgba(0,0,0,0.15)',
+            zIndex: 50,
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden'
+          }}>
+            <div style={{
+              padding: '24px 28px',
+              borderBottom: '1px solid #E5E7EB',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              backgroundColor: '#0F1B2D'
+            }}>
+              <h2 style={{ color: 'white', fontSize: '18px', fontWeight: '600', margin: 0 }}>
+                {tipo === 'entrada' ? '📦 Registrar Entrada' :
+                 tipo === 'salida' ? '📤 Registrar Salida' :
+                 '⚖️ Ajuste de Stock'}
               </h2>
-              <button onClick={() => setDrawerOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "20px", color: "#64748B" }}>
-                ✕
-              </button>
+              <button
+                onClick={() => setDrawerOpen(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'white',
+                  fontSize: '22px',
+                  cursor: 'pointer',
+                  lineHeight: 1
+                }}
+              >✕</button>
             </div>
 
-            <form action={registrarMovimiento} style={{ display: "flex", flexDirection: "column", gap: "20px", flex: 1 }}>
-              <input type="hidden" name="tipo" value={tipo} />
+            <form id="stock-form" action={registrarMovimiento} style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'hidden'
+            }}>
+              <div style={{
+                flex: 1,
+                overflowY: 'auto',
+                padding: '28px'
+              }}>
+                <input type="hidden" name="tipo" value={tipo} />
 
-              <div>
-                <label className="font-label-caps text-label-caps text-on-surface-variant block mb-xs">Producto</label>
-                <select name="producto_id" required className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-sm font-body-md focus:ring-2 focus:ring-secondary/20 outline-none">
-                  <option value="">Seleccionar producto...</option>
-                  {productos.map((p) => (
-                    <option key={p.id} value={p.id}>{p.nombre}</option>
-                  ))}
-                </select>
-              </div>
+                <div>
+                  <label className="font-label-caps text-label-caps text-on-surface-variant block mb-xs">Producto</label>
+                  <select name="producto_id" required className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-sm font-body-md focus:ring-2 focus:ring-secondary/20 outline-none">
+                    <option value="">Seleccionar producto...</option>
+                    {productos.map((p) => (
+                      <option key={p.id} value={p.id}>{p.nombre}</option>
+                    ))}
+                  </select>
+                </div>
 
-              <div>
-                <label className="font-label-caps text-label-caps text-on-surface-variant block mb-xs">Cantidad</label>
-                <input name="cantidad" type="number" min="1" required className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-sm font-body-md focus:ring-2 focus:ring-secondary/20 outline-none" />
-              </div>
+                <div style={{ marginTop: '20px' }}>
+                  <label className="font-label-caps text-label-caps text-on-surface-variant block mb-xs">Cantidad</label>
+                  <input name="cantidad" type="number" min="1" required className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-sm font-body-md focus:ring-2 focus:ring-secondary/20 outline-none" />
+                </div>
 
-              <div>
-                <label className="font-label-caps text-label-caps text-on-surface-variant block mb-xs">Motivo</label>
-                <input
-                  name="motivo"
-                  className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-sm font-body-md focus:ring-2 focus:ring-secondary/20 outline-none"
-                  placeholder={tipo === "entrada" ? "Compra a proveedor" : tipo === "salida" ? "Venta al cliente" : "Ajuste manual"}
-                />
-              </div>
-
-              <div style={{ marginTop: "auto", display: "flex", gap: "12px", paddingTop: "16px", borderTop: "1px solid #E2E8F0" }}>
-                <button type="button" onClick={() => setDrawerOpen(false)} className="flex-1 px-lg py-sm rounded-lg border border-outline-variant font-body-md text-on-surface hover:bg-surface-container-low transition-colors">
-                  Cancelar
-                </button>
-                <button type="submit" className="flex-1 px-lg py-sm rounded-lg bg-secondary text-on-secondary font-bold hover:brightness-110 transition-all">
-                  Registrar
-                </button>
+                <div style={{ marginTop: '20px' }}>
+                  <label className="font-label-caps text-label-caps text-on-surface-variant block mb-xs">Motivo</label>
+                  <input
+                    name="motivo"
+                    className="w-full bg-surface-container-low border border-outline-variant rounded-lg px-md py-sm font-body-md focus:ring-2 focus:ring-secondary/20 outline-none"
+                    placeholder={tipo === "entrada" ? "Compra a proveedor" : tipo === "salida" ? "Venta al cliente" : "Ajuste manual"}
+                  />
+                </div>
               </div>
             </form>
+
+            <div style={{
+              padding: '20px 28px',
+              borderTop: '1px solid #E5E7EB',
+              display: 'flex',
+              gap: '12px'
+            }}>
+              <button
+                onClick={() => setDrawerOpen(false)}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  border: '1px solid #E5E7EB',
+                  borderRadius: '8px',
+                  background: 'white',
+                  cursor: 'pointer',
+                  fontWeight: '500'
+                }}
+              >Cancelar</button>
+              <button
+                type="submit"
+                form="stock-form"
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  border: 'none',
+                  borderRadius: '8px',
+                  background: '#10B981',
+                  color: 'white',
+                  cursor: 'pointer',
+                  fontWeight: '600'
+                }}
+              >Confirmar</button>
+            </div>
           </div>
         </>
       )}
