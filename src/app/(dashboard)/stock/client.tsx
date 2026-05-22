@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
-import { registrarMovimiento } from "@/app/actions/stock"
+import { useState, useRef } from "react"
+import { createClient } from "@/lib/supabase/client"
+import toast, { Toaster } from "react-hot-toast"
 
 const tipoColors: Record<string, string> = {
   entrada: "bg-secondary/10 text-secondary",
@@ -18,10 +19,46 @@ export default function StockClient({
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [tipo, setTipo] = useState("entrada")
+  const [loading, setLoading] = useState(false)
+  const formRef = useRef<HTMLFormElement>(null)
+  const supabase = createClient()
 
   function openDrawer(t: string) {
     setTipo(t)
     setDrawerOpen(true)
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setLoading(true)
+
+    const form = new FormData(e.currentTarget)
+    const producto_id = form.get("producto_id") as string
+    const cantidad = parseInt(form.get("cantidad") as string)
+    const motivo = form.get("motivo") as string
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error("No autenticado")
+
+      const { error } = await supabase.from("movimientos_stock").insert({
+        producto_id,
+        tipo,
+        cantidad,
+        motivo,
+        usuario_id: user.id,
+      })
+
+      if (error) throw error
+
+      toast.success("Movimiento registrado correctamente")
+      formRef.current?.reset()
+      setDrawerOpen(false)
+    } catch (err: any) {
+      toast.error("Error: " + (err.message || JSON.stringify(err)))
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -138,7 +175,7 @@ export default function StockClient({
               >✕</button>
             </div>
 
-            <form id="stock-form" action={registrarMovimiento} style={{
+            <form id="stock-form" ref={formRef} onSubmit={handleSubmit} style={{
               flex: 1,
               display: 'flex',
               flexDirection: 'column',
@@ -198,21 +235,24 @@ export default function StockClient({
               <button
                 type="submit"
                 form="stock-form"
+                disabled={loading}
                 style={{
                   flex: 1,
                   padding: '12px',
                   border: 'none',
                   borderRadius: '8px',
-                  background: '#10B981',
+                  background: loading ? '#94A3B8' : '#10B981',
                   color: 'white',
-                  cursor: 'pointer',
+                  cursor: loading ? 'not-allowed' : 'pointer',
                   fontWeight: '600'
                 }}
-              >Confirmar</button>
+              >{loading ? 'Registrando...' : 'Confirmar'}</button>
             </div>
           </div>
         </>
       )}
+
+      <Toaster position="top-right" toastOptions={{ duration: 3000, style: { fontSize: "14px" } }} />
     </>
   )
 }
