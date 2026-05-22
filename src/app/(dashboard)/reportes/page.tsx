@@ -15,11 +15,11 @@ export default function ReportesPage() {
   const [ventasHoy, setVentasHoy] = useState(0)
   const [ventasMes, setVentasMes] = useState(0)
   const [stockBajo, setStockBajo] = useState(0)
-  const [porVencer, setPorVencer] = useState(0)
+  const [stockCritico, setStockCritico] = useState(0)
   const [ventasGrafico, setVentasGrafico] = useState<any[]>([])
   const [topProductos, setTopProductos] = useState<any[]>([])
   const [alertasStock, setAlertasStock] = useState<any[]>([])
-  const [alertasVencimiento, setAlertasVencimiento] = useState<any[]>([])
+  const [alertasStockCritico, setAlertasStockCritico] = useState<any[]>([])
 
   useEffect(() => {
     loadData()
@@ -31,7 +31,6 @@ export default function ReportesPage() {
       const hoyStr = hoy.toISOString().split("T")[0]
       const inicioMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1).toISOString().split("T")[0]
       const hace7 = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
-      const dentro30 = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
 
       // Ventas hoy
       const { data: vHoy } = await supabase.from("ventas").select("total").gte("created_at", hoyStr)
@@ -44,10 +43,6 @@ export default function ReportesPage() {
       // Stock bajo count
       const { data: prod } = await supabase.from("productos").select("stock_actual, stock_minimo").gt("stock_minimo", 0)
       setStockBajo(prod?.filter((p) => p.stock_actual <= p.stock_minimo).length ?? 0)
-
-      // Por vencer count
-      const { count: pv } = await supabase.from("lotes").select("*", { count: "exact", head: true }).lte("fecha_vencimiento", dentro30).gte("fecha_vencimiento", hoyStr)
-      setPorVencer(pv ?? 0)
 
       // Ventas últimos 7 días para gráfico
       const { data: v7 } = await supabase.from("ventas").select("total, created_at").gte("created_at", hace7).order("created_at")
@@ -77,9 +72,10 @@ export default function ReportesPage() {
       const { data: stockBajoData } = await supabase.rpc("get_productos_stock_bajo")
       setAlertasStock(stockBajoData ?? [])
 
-      // Alertas por vencer via RPC
-      const { data: porVencerData } = await supabase.rpc("get_productos_por_vencer")
-      setAlertasVencimiento(porVencerData ?? [])
+      // Stock crítico via RPC
+      const { data: stockCriticoData } = await supabase.rpc("get_productos_por_vencer")
+      setAlertasStockCritico(stockCriticoData ?? [])
+      setStockCritico(stockCriticoData?.length ?? 0)
 
     } catch (e) {
       console.error("Error loading reportes:", e)
@@ -110,7 +106,7 @@ export default function ReportesPage() {
         ["Ventas hoy", `S/ ${ventasHoy}`],
         ["Ventas del mes", `S/ ${ventasMes}`],
         ["Productos stock bajo", `${stockBajo} productos`],
-        ["Productos por vencer", `${porVencer} productos`],
+        ["Stock Crítico", `${stockCritico} productos`],
       ],
       theme: "striped",
       headStyles: { fillColor: [16, 185, 129] },
@@ -168,8 +164,8 @@ export default function ReportesPage() {
           <p className="font-headline-lg text-headline-lg text-amber-600 font-bold mt-xs">{stockBajo}</p>
         </div>
         <div className="bg-surface-container-lowest p-md rounded-xl border border-outline-variant shadow-sm">
-          <p className="font-label-caps text-label-caps text-on-surface-variant">Por Vencer (30d)</p>
-          <p className="font-headline-lg text-headline-lg text-error font-bold mt-xs">{porVencer}</p>
+          <p className="font-label-caps text-label-caps text-on-surface-variant">Stock Crítico (≤5)</p>
+          <p className="font-headline-lg text-headline-lg text-error font-bold mt-xs">{stockCritico}</p>
         </div>
       </div>
 
@@ -223,7 +219,7 @@ export default function ReportesPage() {
         {/* Alertas desde RPC */}
         <div className="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm">
           <h3 className="font-headline-sm text-headline-sm text-primary mb-lg">Alertas Críticas</h3>
-          {alertasStock.length === 0 && alertasVencimiento.length === 0 ? (
+          {alertasStock.length === 0 && alertasStockCritico.length === 0 ? (
             <p className="font-body-md text-body-md text-on-surface-variant">Todo en orden ✅</p>
           ) : (
             <div className="space-y-md">
@@ -237,14 +233,14 @@ export default function ReportesPage() {
                   <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-amber-200 text-amber-800 uppercase">Stock Bajo</span>
                 </div>
               ))}
-              {alertasVencimiento.map((l: any, i: number) => (
-                <div key={`venc-${i}`} className="flex items-center gap-md p-sm rounded-lg bg-red-50 border border-red-200">
-                  <span className="material-symbols-outlined text-error">event_busy</span>
+              {alertasStockCritico.map((p: any, i: number) => (
+                <div key={`critico-${i}`} className="flex items-center gap-md p-sm rounded-lg bg-red-50 border border-red-200">
+                  <span className="material-symbols-outlined text-error">priority_high</span>
                   <div className="flex-1">
-                    <p className="font-body-md font-semibold text-red-900">{l.nombre}</p>
-                    <p className="text-[12px] text-red-700">Lote {l.codigo_lote} — Vence: {l.fecha_vencimiento}</p>
+                    <p className="font-body-md font-semibold text-red-900">{p.nombre}</p>
+                    <p className="text-[12px] text-red-700">SKU: {p.codigo_sku} — Stock: {p.stock_actual}</p>
                   </div>
-                  <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-red-200 text-red-800 uppercase">Vence Pronto</span>
+                  <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-red-200 text-red-800 uppercase">Stock Crítico</span>
                 </div>
               ))}
             </div>

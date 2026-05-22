@@ -9,11 +9,9 @@ RETURNS TABLE(id uuid, nombre text, stock_actual int, stock_minimo int, codigo_s
 $$ LANGUAGE sql SECURITY DEFINER;
 
 CREATE OR REPLACE FUNCTION get_productos_por_vencer()
-RETURNS TABLE(id uuid, nombre text, codigo_lote text, fecha_vencimiento date) AS $$
-  SELECT p.id, p.nombre, l.codigo_lote, l.fecha_vencimiento
-  FROM lotes l
-  JOIN productos p ON p.id = l.producto_id
-  WHERE l.fecha_vencimiento <= CURRENT_DATE + INTERVAL '30 days'
-    AND l.fecha_vencimiento >= CURRENT_DATE
-  ORDER BY l.fecha_vencimiento ASC;
+RETURNS TABLE(id uuid, nombre text, stock_actual int, codigo_sku text) AS $$
+  SELECT id, nombre, stock_actual, codigo_sku
+  FROM productos
+  WHERE stock_actual <= 5
+  ORDER BY stock_actual ASC;
 $$ LANGUAGE sql SECURITY DEFINER;
