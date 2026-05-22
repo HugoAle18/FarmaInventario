@@ -10,7 +10,7 @@ export default async function LoginPage(props: {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 h-dvh w-full overflow-hidden">
       {/* Left Panel - #0F1B2D */}
-      <div className="hidden lg:flex bg-[#0F1B2D] relative flex-col">
+      <div className="hidden lg:flex flex-col justify-between w-1/2 min-w-[480px] bg-[#0F1B2D] p-12 h-full relative">
         {/* Decorative gradient blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-[#10B981]/5" style={{ filter: "blur(100px)" }} />
@@ -18,7 +18,7 @@ export default async function LoginPage(props: {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 flex flex-col h-full p-10">
+        <div className="relative z-10 flex flex-col h-full">
           {/* Logo */}
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-xl bg-[#10B981] flex items-center justify-center shadow-lg shadow-[#10B981]/30">
@@ -32,8 +32,8 @@ export default async function LoginPage(props: {
           </div>
 
           {/* Spacer */}
-          <div className="flex-1 flex flex-col justify-center max-w-sm">
-            <p className="text-[#94A3B8] text-base leading-relaxed mt-4">
+          <div className="flex-1 flex flex-col justify-center">
+            <p className="text-slate-400 text-base leading-relaxed max-w-sm mt-3">
               Sistema inteligente de gestión de inventario para farmacias.
             </p>
 
@@ -44,8 +44,8 @@ export default async function LoginPage(props: {
                   <span className="material-symbols-outlined text-[#10B981] text-[22px]">inventory_2</span>
                 </div>
                 <div>
-                  <p className="text-white font-semibold text-[15px]">Control de Stock</p>
-                  <p className="text-[#94A3B8] text-[13px] mt-0.5">Tiempo real con alertas inteligentes</p>
+                  <p className="text-white font-semibold text-sm">Control de Stock</p>
+                  <p className="text-slate-400 text-xs leading-normal">Tiempo real con alertas inteligentes</p>
                 </div>
               </div>
 
@@ -54,8 +54,8 @@ export default async function LoginPage(props: {
                   <span className="material-symbols-outlined text-[#10B981] text-[22px]">event_note</span>
                 </div>
                 <div>
-                  <p className="text-white font-semibold text-[15px]">Trazabilidad de Lotes</p>
-                  <p className="text-[#94A3B8] text-[13px] mt-0.5">Control de vencimientos</p>
+                  <p className="text-white font-semibold text-sm">Trazabilidad de Lotes</p>
+                  <p className="text-slate-400 text-xs leading-normal">Control de vencimientos</p>
                 </div>
               </div>
 
@@ -64,8 +64,8 @@ export default async function LoginPage(props: {
                   <span className="material-symbols-outlined text-[#10B981] text-[22px]">bar_chart</span>
                 </div>
                 <div>
-                  <p className="text-white font-semibold text-[15px]">Reportes</p>
-                  <p className="text-[#94A3B8] text-[13px] mt-0.5">Ventas e indicadores clave</p>
+                  <p className="text-white font-semibold text-sm">Reportes</p>
+                  <p className="text-slate-400 text-xs leading-normal">Ventas e indicadores clave</p>
                 </div>
               </div>
             </div>
