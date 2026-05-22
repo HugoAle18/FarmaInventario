@@ -1,27 +1,45 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
 import toast, { Toaster } from "react-hot-toast"
 
-const tipoColors: Record<string, string> = {
-  entrada: "bg-secondary/10 text-secondary",
-  salida: "bg-error-container text-on-error-container",
-  ajuste: "bg-tertiary-fixed-dim/20 text-on-tertiary-container",
+const badgeTipo: Record<string, { label: string; bg: string; text: string }> = {
+  entrada: { label: "ENTRADA", bg: "bg-green-100", text: "text-green-800" },
+  salida: { label: "SALIDA", bg: "bg-red-100", text: "text-red-800" },
+  ajuste: { label: "AJUSTE", bg: "bg-blue-100", text: "text-blue-800" },
 }
 
 export default function StockClient({
-  movimientos,
   productos,
 }: {
-  movimientos: any[]
   productos: { id: string; nombre: string }[]
 }) {
+  const [movimientos, setMovimientos] = useState<any[]>([])
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [tipo, setTipo] = useState("entrada")
   const [loading, setLoading] = useState(false)
   const formRef = useRef<HTMLFormElement>(null)
   const supabase = createClient()
+
+  const loadMovimientos = async () => {
+    const { data } = await supabase
+      .from("movimientos_stock")
+      .select(`
+        id,
+        tipo,
+        cantidad,
+        motivo,
+        created_at,
+        productos (nombre, codigo_sku)
+      `)
+      .order("created_at", { ascending: false })
+      .limit(50)
+
+    setMovimientos(data || [])
+  }
+
+  useEffect(() => { loadMovimientos() }, [])
 
   function openDrawer(t: string) {
     setTipo(t)
@@ -50,6 +68,7 @@ export default function StockClient({
       toast.success("Movimiento registrado correctamente")
       formRef.current?.reset()
       setDrawerOpen(false)
+      await loadMovimientos()
     } catch (err: any) {
       toast.error("Error: " + (err.message || JSON.stringify(err)))
     } finally {
@@ -88,32 +107,31 @@ export default function StockClient({
             <thead>
               <tr className="bg-surface-container border-b border-outline-variant">
                 <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Fecha</th>
-                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Tipo</th>
                 <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Producto</th>
+                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Tipo</th>
                 <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Cantidad</th>
-                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Stock Resultante</th>
                 <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Motivo</th>
-                <th className="px-md py-md font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Usuario</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant/30">
-              {movimientos.map((m) => (
-                <tr key={m.id} className="hover:bg-surface-container-low transition-colors">
-                  <td className="px-md py-sm font-body-md text-body-md text-on-surface-variant mono-font">
-                    {new Date(m.created_at).toLocaleDateString("es-PE", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
-                  </td>
-                  <td className="px-md py-sm">
-                    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold uppercase ${tipoColors[m.tipo] ?? ""}`}>{m.tipo}</span>
-                  </td>
-                  <td className="px-md py-sm font-body-md text-body-md font-semibold text-on-surface">{m.productos?.nombre ?? "-"}</td>
-                  <td className="px-md py-sm font-body-md text-body-md font-bold text-on-surface">{m.cantidad}</td>
-                  <td className="px-md py-sm font-body-md text-body-md text-on-surface-variant">{m.stock_resultante}</td>
-                  <td className="px-md py-sm font-body-md text-body-md text-on-surface-variant">{m.motivo ?? "-"}</td>
-                  <td className="px-md py-sm font-body-md text-body-md text-on-surface-variant">{m.usuarios_farmacia?.nombre ?? "-"}</td>
-                </tr>
-              ))}
+              {movimientos.map((m) => {
+                const badge = badgeTipo[m.tipo] ?? { label: m.tipo, bg: "bg-gray-100", text: "text-gray-800" }
+                const fecha = new Date(m.created_at)
+                const fechaStr = fecha.toLocaleDateString("es-PE", { day: "2-digit", month: "2-digit", year: "numeric" }) + " " + fecha.toLocaleTimeString("es-PE", { hour: "2-digit", minute: "2-digit" })
+                return (
+                  <tr key={m.id} className="hover:bg-surface-container-low transition-colors">
+                    <td className="px-md py-sm font-body-md text-body-md text-on-surface-variant mono-font text-nowrap">{fechaStr}</td>
+                    <td className="px-md py-sm font-body-md text-body-md font-semibold text-on-surface">{m.productos?.nombre ?? "-"}</td>
+                    <td className="px-md py-sm">
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold uppercase ${badge.bg} ${badge.text}`}>{badge.label}</span>
+                    </td>
+                    <td className="px-md py-sm font-body-md text-body-md font-bold text-on-surface">{m.cantidad}</td>
+                    <td className="px-md py-sm font-body-md text-body-md text-on-surface-variant">{m.motivo ?? "-"}</td>
+                  </tr>
+                )
+              })}
               {movimientos.length === 0 && (
-                <tr><td colSpan={7} className="text-center py-xl text-on-surface-variant font-body-md">No hay movimientos registrados.</td></tr>
+                <tr><td colSpan={5} className="text-center py-xl text-on-surface-variant font-body-md">No hay movimientos registrados aún</td></tr>
               )}
             </tbody>
           </table>
