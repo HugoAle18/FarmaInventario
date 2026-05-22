@@ -187,7 +187,7 @@ export default function StockClient({
             height: '100vh',
             backgroundColor: 'white',
             boxShadow: '-8px 0 32px rgba(0,0,0,0.15)',
-            zIndex: 50,
+            zIndex: 60,
             display: 'flex',
             flexDirection: 'column',
             overflow: 'hidden'

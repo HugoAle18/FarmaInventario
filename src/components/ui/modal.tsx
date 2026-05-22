@@ -37,14 +37,17 @@ export default function Modal({
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div
+      className="fixed inset-0 z-50 flex items-start sm:items-center justify-center"
+      style={{ padding: "16px", paddingBottom: "80px" }}
+    >
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
         onClick={onClose}
       />
       <div
         className={cn(
-          "relative bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-xl w-full mx-lg max-h-[90vh] overflow-y-auto",
+          "relative bg-surface-container-lowest rounded-2xl border border-outline-variant shadow-xl w-full mx-lg max-h-[85vh] overflow-y-auto",
           size === "sm" && "max-w-sm",
           size === "md" && "max-w-lg",
           size === "lg" && "max-w-2xl"
