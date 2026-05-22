@@ -8,13 +8,13 @@ export default async function LoginPage(props: {
 
   return (
     <main style={{ display: "flex", width: "100%", minHeight: "100vh" }}>
-      {/* Left Panel */}
+      {/* Left Panel — hidden on mobile */}
       <div
+        className="hidden lg:flex"
         style={{
           width: "45%",
           backgroundColor: "#0F1B2D",
           padding: "48px",
-          display: "flex",
           flexDirection: "column",
           gap: "32px",
         }}

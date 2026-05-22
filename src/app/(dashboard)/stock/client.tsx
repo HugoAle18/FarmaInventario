@@ -85,12 +85,12 @@ export default function StockClient({
             Historial de entradas, salidas y ajustes de inventario.
           </p>
         </div>
-        <div className="flex gap-xs">
+        <div className="flex flex-wrap gap-2 w-full">
           {(["entrada", "salida", "ajuste"] as const).map((t) => (
             <button
               key={t}
               onClick={() => openDrawer(t)}
-              className="bg-secondary text-on-secondary px-lg py-sm rounded-lg flex items-center gap-sm font-headline-sm text-headline-sm hover:brightness-110 active:scale-95 transition-all shadow-sm"
+              className="flex-1 min-w-[100px] bg-secondary text-on-secondary px-lg py-sm rounded-lg flex items-center justify-center gap-sm font-headline-sm text-headline-sm hover:brightness-110 active:scale-95 transition-all shadow-sm"
             >
               <span className="material-symbols-outlined">
                 {t === "entrada" ? "add_box" : t === "salida" ? "remove_shopping_cart" : "edit_note"}

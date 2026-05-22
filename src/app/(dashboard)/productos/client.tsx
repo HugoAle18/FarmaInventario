@@ -3,7 +3,6 @@
 import { useState, useMemo, useCallback } from "react"
 import SearchInput from "@/components/ui/search-input"
 import Pagination from "@/components/ui/pagination"
-import ProductFilters from "@/components/productos/product-filters"
 import Badge from "@/components/ui/badge"
 import Modal from "@/components/ui/modal"
 import ProductForm from "@/components/productos/product-form"
@@ -81,25 +80,27 @@ export default function ProductosClient({
             Gestión centralizada de existencias, lotes y fechas de caducidad.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-md">
-          <ProductFilters
-            categoria={categoria}
-            laboratorio={laboratorio}
-            estado={estado}
-            onCategoriaChange={setCategoria}
-            onLaboratorioChange={setLaboratorio}
-            onEstadoChange={setEstado}
-          />
-          <button
-            onClick={() => setModalOpen(true)}
-            className="bg-secondary text-on-secondary px-lg py-sm rounded-lg flex items-center gap-sm font-headline-sm text-headline-sm hover:brightness-110 active:scale-95 transition-all shadow-sm"
-          >
-            <span
-              className="material-symbols-outlined"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              add_circle
-            </span>
+        <div className="flex flex-wrap gap-2 w-full">
+          <select value={categoria} onChange={(e) => setCategoria(e.target.value)} className="flex-1 min-w-[120px] bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-secondary/20 outline-none">
+            <option value="">Categoría</option>
+            <option value="analgesicos">Analgésicos</option>
+            <option value="antibioticos">Antibióticos</option>
+            <option value="vitaminas">Vitaminas</option>
+          </select>
+          <select value={laboratorio} onChange={(e) => setLaboratorio(e.target.value)} className="flex-1 min-w-[120px] bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-secondary/20 outline-none">
+            <option value="">Laboratorio</option>
+            <option value="pfizer">Pfizer</option>
+            <option value="bayer">Bayer</option>
+            <option value="roche">Roche</option>
+          </select>
+          <select value={estado} onChange={(e) => setEstado(e.target.value)} className="flex-1 min-w-[120px] bg-surface-container-low border border-outline-variant rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-secondary/20 outline-none">
+            <option value="">Estado</option>
+            <option value="disponible">Disponible</option>
+            <option value="stock_bajo">Stock Bajo</option>
+            <option value="agotado">Agotado</option>
+          </select>
+          <button onClick={() => setModalOpen(true)} className="w-full sm:w-auto bg-secondary text-on-secondary px-lg py-2 rounded-lg flex items-center justify-center gap-sm font-headline-sm text-headline-sm hover:brightness-110 active:scale-95 transition-all shadow-sm">
+            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>add_circle</span>
             <span>Agregar Producto</span>
           </button>
         </div>
