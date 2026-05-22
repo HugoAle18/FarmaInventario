@@ -165,11 +165,11 @@ export default function ReportesPage() {
       </div>
 
       {/* Chart */}
-      <div className="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm">
+      <div className="w-full overflow-hidden bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm">
         <h3 className="font-headline-sm text-headline-sm text-primary mb-lg">Ventas Últimos 7 Días</h3>
-        <div style={{ height: 300 }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={ventasGrafico} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+        <div style={{ width: '100%', overflowX: 'hidden' }}>
+          <ResponsiveContainer width="100%" height={250}>
+            <AreaChart data={ventasGrafico} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#10B981" stopOpacity={0.2} />
