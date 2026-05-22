@@ -78,7 +78,7 @@ export default function VentasPage() {
 
       const { data: venta, error: errorVenta } = await supabase
         .from("ventas")
-        .insert({ total, usuario_id: user.id })
+        .insert({ total })
         .select()
         .single()
 
