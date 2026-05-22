@@ -22,7 +22,7 @@ export default function TopAppBar() {
 
   return (
     <header className="flex justify-between items-center h-16 px-lg bg-surface border-b border-outline-variant sticky top-0 z-40">
-      <div className="flex items-center gap-md w-1/3">
+      <div className="flex items-center gap-md w-full max-w-md">
         <div className="relative w-full focus-within:ring-2 focus-within:ring-secondary/50 rounded-lg">
           <span className="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">
             search

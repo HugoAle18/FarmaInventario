@@ -7,9 +7,9 @@ export default async function LoginPage(props: {
   const error = searchParams?.error
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen w-full overflow-hidden">
+    <div className="grid grid-cols-1 lg:grid-cols-2 h-dvh w-full overflow-hidden">
       {/* Left Panel - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 min-w-0 bg-primary-container relative items-center justify-center">
+      <div className="hidden lg:flex bg-primary-container relative items-center justify-center">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
           <div
             className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-secondary"
@@ -27,24 +27,24 @@ export default async function LoginPage(props: {
               medical_services
             </span>
           </div>
-          <h1 className="font-headline-lg text-headline-lg text-on-primary font-bold whitespace-normal">
+          <h1 className="font-headline-lg text-headline-lg text-on-primary font-bold">
             FarmaInventario
           </h1>
-          <p className="font-body-lg text-body-lg text-on-primary-container mt-md whitespace-normal">
+          <p className="font-body-lg text-body-lg text-on-primary-container mt-md">
             Sistema inteligente de gestión de inventario para farmacias.
             Controla stock, lotes, ventas y más desde un solo lugar.
           </p>
 
-          <div className="flex flex-col gap-md mt-xl w-full max-w-sm mx-auto">
+          <div className="flex flex-col gap-md mt-xl max-w-sm mx-auto">
             <div className="flex items-center gap-md text-left">
               <div className="w-10 h-10 rounded-lg bg-secondary/20 flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-secondary">inventory_2</span>
               </div>
-              <div className="min-w-0">
-                <p className="font-body-md text-body-md font-semibold text-on-primary whitespace-normal">
+              <div>
+                <p className="font-body-md text-body-md font-semibold text-on-primary">
                   Control de Stock
                 </p>
-                <p className="text-[12px] text-on-primary-container/70 whitespace-normal">
+                <p className="text-[12px] text-on-primary-container/70">
                   Tiempo real con alertas inteligentes
                 </p>
               </div>
@@ -53,11 +53,11 @@ export default async function LoginPage(props: {
               <div className="w-10 h-10 rounded-lg bg-secondary/20 flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-secondary">event_note</span>
               </div>
-              <div className="min-w-0">
-                <p className="font-body-md text-body-md font-semibold text-on-primary whitespace-normal">
+              <div>
+                <p className="font-body-md text-body-md font-semibold text-on-primary">
                   Trazabilidad de Lotes
                 </p>
-                <p className="text-[12px] text-on-primary-container/70 whitespace-normal">
+                <p className="text-[12px] text-on-primary-container/70">
                   Control de vencimientos y lotes
                 </p>
               </div>
@@ -66,11 +66,11 @@ export default async function LoginPage(props: {
               <div className="w-10 h-10 rounded-lg bg-secondary/20 flex items-center justify-center shrink-0">
                 <span className="material-symbols-outlined text-secondary">bar_chart</span>
               </div>
-              <div className="min-w-0">
-                <p className="font-body-md text-body-md font-semibold text-on-primary whitespace-normal">
+              <div>
+                <p className="font-body-md text-body-md font-semibold text-on-primary">
                   Reportes
                 </p>
-                <p className="text-[12px] text-on-primary-container/70 whitespace-normal">
+                <p className="text-[12px] text-on-primary-container/70">
                   Ventas, movimientos y estadísticas
                 </p>
               </div>
@@ -80,7 +80,7 @@ export default async function LoginPage(props: {
       </div>
 
       {/* Right Panel - Login Form */}
-      <div className="flex-1 min-w-0 flex items-center justify-center bg-surface py-lg px-md">
+      <div className="flex items-center justify-center bg-surface p-lg">
         <div className="w-full max-w-md mx-auto">
           {/* Mobile Logo */}
           <div className="lg:hidden text-center mb-xl">
@@ -89,20 +89,20 @@ export default async function LoginPage(props: {
                 medical_services
               </span>
             </div>
-            <h1 className="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold whitespace-normal">
+            <h1 className="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold">
               FarmaInventario
             </h1>
-            <p className="font-body-md text-body-md text-on-surface-variant mt-xs whitespace-normal">
+            <p className="font-body-md text-body-md text-on-surface-variant mt-xs">
               Pharmacy Management
             </p>
           </div>
 
           <div className="bg-surface-container-lowest px-xl py-xl rounded-2xl border border-outline-variant shadow-sm">
             <div className="mb-lg">
-              <h2 className="font-headline-sm text-headline-sm text-primary whitespace-normal">
+              <h2 className="font-headline-sm text-headline-sm text-primary">
                 Iniciar Sesión
               </h2>
-              <p className="font-body-md text-body-md text-on-surface-variant mt-xs whitespace-normal">
+              <p className="font-body-md text-body-md text-on-surface-variant mt-xs">
                 Ingresa tus credenciales para acceder al sistema
               </p>
             </div>
@@ -110,7 +110,7 @@ export default async function LoginPage(props: {
             {error && (
               <div className="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-md text-body-md flex items-center gap-sm">
                 <span className="material-symbols-outlined text-[18px] shrink-0">error</span>
-                <span className="whitespace-normal">
+                <span>
                   {error === "Invalid login credentials"
                     ? "Credenciales inválidas. Verifica tu email y contraseña."
                     : error}
@@ -175,7 +175,7 @@ export default async function LoginPage(props: {
             </form>
           </div>
 
-          <p className="text-center font-body-md text-body-md text-on-surface-variant mt-lg whitespace-normal">
+          <p className="text-center font-body-md text-body-md text-on-surface-variant mt-lg">
             &copy; {new Date().getFullYear()} FarmaInventario. Todos los derechos reservados.
           </p>
         </div>
